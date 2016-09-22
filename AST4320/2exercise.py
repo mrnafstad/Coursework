@@ -1,13 +1,15 @@
 from matplotlib.pylab import *
 from numpy import *
+import sys
 
 H0 = 70e3 				#km / s / Mpc
-n = 1e5
+n = 1e6
 G = 6.674e-11			#m^3 / kg / s^-2 7
 rho0 = 1
-lng = 1e2
+lng = 200
 h = lng/float(n-1)		#steplength
-
+m = float(sys.argv[1])
+c = float(sys.argv[2])
 
 
 def adotovera(massfrac, constfrac, a_i):
@@ -28,21 +30,26 @@ deltai = 10**(-3)
 deltaderi = ai
 
 deltaplus = 0
+j = 0
 
 alpha = 4*pi*G*rho0
 
 for i in range(int(n-1)):
-	b = adotovera(0.3, 0.8, ai)
+	b = adotovera(m, c, ai)
 
 	deltaplus = h**2*(deltai*alpha - b*deltaderi) - h*deltaderi + deltai
 	
 	logdelta[i+1] = log10(abs(deltaplus))
 	
-	delderi = (deltaplus + deltai)/float(h)
-	
-	loga[i] = log10(ai)
+	deltaderi = (10**(logdelta[i+1]) - 10**(logdelta[i]))/float(h)
 	
 	ai += h*ai
+
+	loga[i+1] = log10(ai)
+	j += 1
+	if j == 10000:
+		print i, ai
+		j = 0
 	
 plot(loga, logdelta)
 xlabel(r"$log$ a")
