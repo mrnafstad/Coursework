@@ -1,0 +1,59 @@
+n       INP             //Les inn anntall tall som skal summeres
+        STA n
+
+loop    LDA n           //Loop der n tall leses inn og summeres
+        BRZ skriv
+        INP 
+        STA les
+        LDA n
+        SUB inc
+        STA n
+        LDA sum
+        ADD les 
+        STA sum 
+        BRA loop 
+
+skriv   LDA sum         //Utsrift av sum
+        OUT 
+
+loop2   LDA sum         //Loop som trekker 2 fra sum til sum <= 0. Hvis 0 går vi til pair, ellers til odde
+        BRZ pair
+        SUB dec
+        STA sum
+        BRP loop2
+
+odd     LDA odde        //Loop som skriver ut "odde" dersom loop2 ga sum < 0
+        BRZ ferdig
+        OTC
+        LDA odd
+        ADD inc
+        STA odd
+        BRA odd
+pair    LDA pair        //Loop som skriver ut "par" dersom loop2 ga sum = 0
+        BRZ ferdig
+        OTC
+        LDA pair
+        ADD inc
+        STA pair
+        BRA pair
+
+ferdig  HLT             //Stopper programmet etter utskrifter
+
+sum     DAT 0           //Lagring av variabler
+inc     DAT 1
+dec     DAT 2
+n       DAT
+les     DAT
+mod     DAT
+
+odde    DAT 10          //lagring av ascii tegn for utskrift av ord
+        DAT 111 //o
+        DAT 100 //d
+        DAT 100 //d
+        DAT 101 //e
+        DAT 0
+par     DAT 10
+        DAT 112 //p
+        DAT 97 //a
+        DAT 114 //r
+        DAT 0
