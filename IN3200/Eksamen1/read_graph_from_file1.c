@@ -25,7 +25,14 @@ void read_graph_from_file1 (char *filename, int *N, char ***table2D) {
 	*N = atoi(ptr);
 
 	// Skjer noe feil i oppsett av table2D
-	*table2D = (char **)malloc(*N * *N * sizeof *table2D);
+	*table2D = (char **)malloc(*N * sizeof (char *) + *N * *N *sizeof(char));
+	char *ptr1 = (char *)(*table2D + *N);
+	for (int i = 0; i < *N; i ++) {
+		table2D[i] = (ptr1 + *N + i);
+	}
+	// for (int i = 0; i < *N; i ++) {
+	// 	*table2D[i] = (char *)malloc(*N * sizeof (char));
+	// }
 	
 	//Get to the edges
 	fgets(line, 100, fp);
@@ -33,6 +40,13 @@ void read_graph_from_file1 (char *filename, int *N, char ***table2D) {
 
 	// Må kanskje skrive om initialiseringen her så jeg tar arrayet element for element
 	printf("%d \n", *N);
+	for (int i = 0; i < *N; i ++) {
+		printf("%d \n", i);
+		for (int j = 0; j < *N; j ++) {
+			table2D[i][j] = "0";
+			printf("%d \n", j);
+		}
+	}
 	while (fgets(line, 100, fp) != NULL) {
 		node1 = atoi(strtok(line, " "));
 		node2 = atoi(strtok(NULL, " "));
@@ -41,28 +55,23 @@ void read_graph_from_file1 (char *filename, int *N, char ***table2D) {
 		printf("%s\n", table2D[node1][node2]);
 	}
 
-	for (int i = 0; i < *N; i ++) {
-		for (int j = 0; j < *N; j ++) {
-			if (table2D[i][j] == NULL){
-				table2D[i][j] = "0";
-			}
-		}
-	}
+
+
 
 	fclose(fp);
 }
 
 int main(void) {
 	int N;
-	char **table2D;
-	read_graph_from_file1("webgraph1.txt", &N, &table2D);
+	char ***table2D;
+	read_graph_from_file1("webgraph1.txt", &N, table2D);
 	printf("54\n");
 
 	printf("%d", N);
 
 	for (int i = 0; i < N; i ++) {
 		for (int j = 0; j < N; j ++) {
-			printf("%d ", table2D[i][j]);
+			printf("%s ", table2D[i][j]);
 		}
 		printf("\n");
 		free(table2D[i]);
