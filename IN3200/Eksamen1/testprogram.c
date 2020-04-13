@@ -110,8 +110,8 @@ int main(int argc, char *argv[]) {
 		//free(num_involvements);
 		free(num_involvements2);
 		//free(table2D);
-		free(rows);
-		free(cols);
+		//free(rows);
+		//free(cols);
 
 		end_prog = clock();
 		total = (double)(end_prog - start_prog)/CLOCKS_PER_SEC;
