@@ -50,13 +50,20 @@ void read_graph_from_file1 (char *filename, int *N, char ***table2D) {
 			table[i][j] = '0';
 	}
 
-	// Må kanskje skrive om initialiseringen her så jeg tar arrayet element for element
-	while (fgets(line, 100, fp) != NULL) {
-		node2 = atoi(strtok(line, " "));
-		node1 = atoi(strtok(NULL, " "));
-		if (!(node1 == node2)) table[node1][node2] = '1';
-		count ++;
-	}	
+	// while (fgets(line, 100, fp) != NULL) {
+	// 	node2 = atoi(strtok(line, " "));
+	// 	node1 = atoi(strtok(NULL, " "));
+	// 	if (!(node1 == node2)) table[node1][node2] = '1';
+	// 	count ++;
+	// }	
+
+	int FromNodeId, ToNodeId;
+	while (fscanf(fp, "%d %d", &FromNodeId, &ToNodeId) == 2){
+	    //Disregard self-links
+	    if (!(FromNodeId == ToNodeId)){
+	      table[ToNodeId][FromNodeId] = '1';
+	    }
+	  }
 	
 
 	*table2D = table;

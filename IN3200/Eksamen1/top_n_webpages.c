@@ -7,7 +7,7 @@ void top_n_webpages(int num_webpages, int *num_involvements, int n) {
 		return;
 	}
 
-	// Lage kopi, sortere 
+	// Allocate memory for an array containing the indices of the top n webpages, ordered
 	int *n_top_index = (int *)malloc(n * sizeof(int));
 	int prev, exists;
 
