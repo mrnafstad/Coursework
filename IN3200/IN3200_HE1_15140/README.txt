@@ -9,3 +9,5 @@ $ gcc -fopenmp -o testOMP testprogram.c
 $ ./testOMP wegraph1.txt
 
 The specific implementation of OpenMP allows the user to choose at compilation wether to parallelise or not.
+
+You may also need to include -std=c99 at compilation

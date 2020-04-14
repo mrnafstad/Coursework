@@ -2,7 +2,6 @@
 #include <string.h>
 #include <stdlib.h>
 void read_graph_from_file2(char *filename, int *N, int *N_links, int **row_ptr, int **col_idx) {
-
 	FILE *fp;
 	char **table;
 	fp = fopen(filename, "r");
@@ -28,42 +27,34 @@ void read_graph_from_file2(char *filename, int *N, int *N_links, int **row_ptr, 
 	}
 	*N = N1;
 	
-	
 	int *rows = (int *)malloc( (N1 + 1) * sizeof(int));
 
 
 	fgets(line, 100, fp);
-	int *node1, *node2, count = 0, extra = 0;
+	int *node1, *node2, count = 0;
 
 	node1 = (int *)malloc(N2 * sizeof(int));
 	node2 = (int *)malloc(N2 * sizeof(int));
 
-	// 
-	// while (fgets(line, 100, fp) != NULL) {
-	// 	node2[count] = atoi(strtok(line, " "));
-	// 	node1[count] = atoi(strtok(NULL, " "));
-	// 	printf("%d \n", count);
-	// 	if (node1[count] != node2[count]) count ++;
-	// }	
-
 	int FromNodeId, ToNodeId;
 
 	while (fscanf(fp, "%d %d", &FromNodeId, &ToNodeId) == 2){
-		if ((FromNodeId <= N1) && (ToNodeId <= N1) && !(FromNodeId == ToNodeId)){
-			node2[count] = FromNodeId;
-			node1[count] = ToNodeId;
-	      	count ++;
-	    } else {
-	    	extra ++;
-	    }
+		
+		if (ToNodeId <= N1)	node1[count] = ToNodeId;
+		if (FromNodeId <= N1) node2[count] = FromNodeId;
+			//Disregard self-links
+
+		if (!(FromNodeId == ToNodeId)){
+		      count ++;
+		}
 	}
-	*N_links = N2 - extra;
-	int *cols = (int *)malloc((N2 - extra) * sizeof(int));
+	*N_links = count;
+	int *cols = (int *)malloc(*N_links * sizeof(int));
 	// Sort on rows
 	count = 0;
 	for (int i = 0; i < N1; i ++) {
 		//printf("%d \n", count);
-		for (int j = 0; j < N2; j ++) {
+		for (int j = 0; j < *N_links; j ++) {
 			if (node1[j] == i) {
 				cols[count] = node2[j];
 				count += 1;

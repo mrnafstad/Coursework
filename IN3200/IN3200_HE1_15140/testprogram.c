@@ -85,7 +85,6 @@ int main(int argc, char *argv[]) {
 
 
 
-		printf("%f \n", (double)CLOCKS_PER_SEC);
 
 		printf("\n");
 		int *rows, *cols;
