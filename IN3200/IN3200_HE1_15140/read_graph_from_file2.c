@@ -26,8 +26,10 @@ void read_graph_from_file2(char *filename, int *N, int *N_links, int **row_ptr, 
 		}
 	}
 	*N = N1;
-	
+	*N_links = N2;
 	int *rows = (int *)malloc( (N1 + 1) * sizeof(int));
+	
+	int *cols = (int *)malloc(N2 * sizeof(int));
 
 
 	fgets(line, 100, fp);
@@ -48,13 +50,11 @@ void read_graph_from_file2(char *filename, int *N, int *N_links, int **row_ptr, 
 		      count ++;
 		}
 	}
-	*N_links = count;
-	int *cols = (int *)malloc(*N_links * sizeof(int));
 	// Sort on rows
 	count = 0;
 	for (int i = 0; i < N1; i ++) {
 		//printf("%d \n", count);
-		for (int j = 0; j < *N_links; j ++) {
+		for (int j = 0; j < N2; j ++) {
 			if (node1[j] == i) {
 				cols[count] = node2[j];
 				count += 1;

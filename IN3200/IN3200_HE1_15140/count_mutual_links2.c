@@ -11,6 +11,7 @@ int count_mutual_links2(int N, int N_links, int *row_ptr, int *col_idx, int *num
 		pairsOnRow = elements*(elements - 1)/2;	
 		pairs += pairsOnRow;
 		for (int j = row_ptr[i]; j < row_ptr[i + 1]; j++) {
+			printf("%d %d %d \n", i, j, col_idx[j]);
 			num_involvements[col_idx[j]] += elements - 1;
 		}	
 	}

@@ -97,16 +97,16 @@ int main(int argc, char *argv[]) {
 		total = (double) (end - start);
 		printf("Read to CRS %f ms\n", CLOCKS_TO_MILLISEC(total));
 
-		//showCRS(N, N_links, rows, cols);
+		showCRS(N, N_links, rows, cols);
 		start = clock();
 		pairs = count_mutual_links2(N, N_links, rows, cols, num_involvements2);
 		end = clock();
 		total = (double) (end - start);
 		printf("Count pairs (CRS) %f ms\n", CLOCKS_TO_MILLISEC(total));
-		// printf("%d \n", pairs);
-		// for (int i = 0; i < N; i ++) {
-		// 	printf("%d: %d \n", i+1, num_involvements2[i]);
-		// }
+		printf("%d \n", pairs);
+		for (int i = 0; i < N; i ++) {
+		 	printf("%d: %d \n", i+1, num_involvements2[i]);
+		}
 		start = clock();
 		top_n_webpages(N, num_involvements2, 4);
 		end = clock();

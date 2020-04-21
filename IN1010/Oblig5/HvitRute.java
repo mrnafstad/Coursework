@@ -1,6 +1,10 @@
 
 public class HvitRute extends Rute {
-	private char type = '.';
+	protected char type = '.';
+
+	public HvitRute(Labyrint lab, int rad, int kolonne) {
+		super(lab, rad, kolonne);
+	}
 
 	public char tilTegn() {
 		return this.type;
