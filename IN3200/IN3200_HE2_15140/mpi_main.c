@@ -35,7 +35,7 @@ void showArray(int **arr, int M, int N) {
 }
 
 int main (int argc, char **argv) {
-	int M=0, N=0, i, rank, num_triple_friends;
+	int M=0, N=0, i, rank, num_triple_friends, global_friends;
 	int **v=NULL;
 	MPI_Init (&argc, &argv);
 	MPI_Comm_rank (MPI_COMM_WORLD, &rank);
@@ -73,7 +73,8 @@ int main (int argc, char **argv) {
 	if (rank==0){
 		free(v[0]);
 	}
-		
+	MPI_Reduce(&num_triple_friends, &global_friends, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 	MPI_Finalize ();
+	printf("Global friends %d\n", global_friends);
 	return 0;
 }
