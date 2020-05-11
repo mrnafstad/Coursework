@@ -33,7 +33,7 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 		//printf("%d\n", V[0][0] );
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
 		loc = M/(size);
-		printf("Stuf: %d %d %d\n", loc, size, M);
+		//printf("Stuf: %d %d %d\n", loc, size, M);
 		if (size == 1) {
 			M2 = M;
 			V2 = V;
@@ -59,10 +59,12 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 						M2 = loc +2;
 						V2 = locArr;
 					} else {
-						showArray2(locArr, loc+2, N, k);
-						MPI_Send(&(locArr[0][0]), (loc+2)*N, MPI_INT, k, 0, MPI_COMM_WORLD);
-						MPI_Send(&M2, 1, MPI_INT, k, 1, MPI_COMM_WORLD);
-						MPI_Send(&N, 1, MPI_INT, k, 2, MPI_COMM_WORLD);
+						//showArray2(locArr, loc+2, N, k);
+						for (i = 0; i < loc + 2; i++) {
+							MPI_Send(&(locArr[0][0]), (loc+2)*N, MPI_INT, k, 0, MPI_COMM_WORLD);
+						}
+						MPI_Send(&M2, 1, MPI_INT, k, 0, MPI_COMM_WORLD);
+						MPI_Send(&N, 1, MPI_INT, k, 1, MPI_COMM_WORLD);
 					}	
 					
 				} else {
@@ -79,17 +81,22 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 						}
 					}
 
-					showArray2(locArr, loc, N, k);
+					//showArray2(locArr, loc, N, k);
 					// Send array, M
-					MPI_Send(locArr, loc*N, MPI_INT, k, 0, MPI_COMM_WORLD);
-					MPI_Send(&loc, 1, MPI_INT, k, 1, MPI_COMM_WORLD);
-					MPI_Send(&N, 1, MPI_INT, k, 2, MPI_COMM_WORLD);
+					for (i = 0; i < loc; i++) {
+						MPI_Send(locArr[i], loc*N, MPI_INT, k, i+2, MPI_COMM_WORLD);
+					}
+					MPI_Send(&loc, 1, MPI_INT, k, 0, MPI_COMM_WORLD);
+					MPI_Send(&N, 1, MPI_INT, k, 1, MPI_COMM_WORLD);
 				}
 			}
 		}
-	} else if (rank != 0) M2 = M;
+	} else if (rank != 0) {
+		M2 = M;
+		V2 = V;
+	}
 
-	printf("dims: %d %d %d\n", M2, N, rank);
+	//printf("dims: %d %d %d\n", M2, N, rank);
 	//showArray2(V2, M2, N, rank);
 
 	for (i = 0; i < M2; i++) {		
