@@ -91,12 +91,13 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 				}
 			}
 		}
+
 	} else if (rank != 0) {
 		M2 = M;
 		V2 = V;
 	}
 
-	//printf("dims: %d %d %d\n", M2, N, rank);
+	printf("dims: %d %d %d\n", M2, N, rank);
 	//showArray2(V2, M2, N, rank);
 
 	for (i = 0; i < M2; i++) {		
@@ -131,8 +132,7 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 				}
 			}
 		}
-		//printf("f\n");
-
 	}
+
 	return num_friends;
 }
