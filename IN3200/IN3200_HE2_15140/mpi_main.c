@@ -55,17 +55,20 @@ int main (int argc, char **argv) {
 			printf("Too many arguments, try  <filename> M N\n");
 		}
 	} else if (rank != 0) {
-		MPI_Recv(&M, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		MPI_Recv(&N, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		printf("%d %d\n", M, N);
+		MPI_Recv(&M, 1, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		printf("M = %d\n", M);
+		MPI_Recv(&N, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+		printf("%d: %d %d\n", rank, M, N);
 
+		int *data = (int *)malloc(M*N*sizeof(int));
 		v = (int **)malloc(M * sizeof(int *));
 		for (i = 0; i < M; i++) {
-			v[i] = (int *)malloc(N * sizeof(int *));
+			v[i] = &(data[i*N]);
 		}
 
 		MPI_Recv(v, M*N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-		//showArray(v, M, N);
+		printf("%d\n", v[0][0]);
+		showArray(v, M, N);
 	}
 	num_triple_friends = MPI_count_friends_of_ten (M, N, v);
 	printf("MPI rank <%d>: number of triple friends=%d\n",
