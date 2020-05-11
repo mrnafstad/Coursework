@@ -24,11 +24,12 @@ void showArray2(int **arr, int M, int N) {
 int MPI_count_friends_of_ten(int M, int N, int** V) {
 	int size, loc, rank;
 
-	int num_friends = 0, i, j, k;
+	int num_friends = 0, i, j, k, M2;
 	MPI_Comm_rank (MPI_COMM_WORLD, &rank);
+	int **V2;
 	
 	if(rank == 0) {
-		printf("%d\n", V[0][0] );
+		//printf("%d\n", V[0][0] );
 		MPI_Comm_size(MPI_COMM_WORLD, &size);
 		loc = M/(size);
 		printf("Stuf: %d %d %d\n", loc, size, M);
@@ -48,8 +49,12 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 					}
 				}
 				if (k == 0) {
-					V = locArr;
-					M = loc + 2;
+					V2 = (int **)malloc((loc+2) * sizeof(int *));
+					for (i = 0; i < loc+2; i++) {
+						V2[i] = (int *)malloc(N * sizeof(int *));
+					}
+					V2 = locArr;
+					M2 = loc + 2;
 				} else {
 					//printf("her\n");
 					// Send array, M
@@ -70,6 +75,7 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 						locArr[i][j] = V[i + loc*k][j];
 					}
 				}
+				showArray2(locArr, loc, N);
 				// Send array, M
 				MPI_Send(locArr, loc*N, MPI_INT, i, 0, MPI_COMM_WORLD);
 				MPI_Send(&loc, 1, MPI_INT, i, 1, MPI_COMM_WORLD);
@@ -78,37 +84,37 @@ int MPI_count_friends_of_ten(int M, int N, int** V) {
 		}
 	}
 
-	printf("dims: %d %d\n", M, N);
-	//showArray2(V, M, N);
+	printf("dims: %d %d\n", M2, N);
+	showArray2(V2, M2, N);
 
-	for (i = 0; i < M; i++) {
+	for (i = 0; i < M2; i++) {
 		for (j = 0; j < N; j++) {
 			//printf("%d %d: ", i, j);
 			if (i == 0) {
 				// check row, collumn and diagonal downards
-				num_friends += checkSum(V[i][j], V[i][j + 1], V[i][j + 2]); 
-				num_friends += checkSum(V[i][j], V[i + 1][j], V[i + 2][j]);
+				num_friends += checkSum(V2[i][j], V2[i][j + 1], V2[i][j + 2]); 
+				num_friends += checkSum(V2[i][j], V2[i + 1][j], V2[i + 2][j]);
 				if (j < N - 2) {
-					num_friends += checkSum(V[i][j], V[i + 1][j + 1], V[i + 2][j + 2]);
+					num_friends += checkSum(V2[i][j], V2[i + 1][j + 1], V2[i + 2][j + 2]);
 				}
-			} else if (i == M - 1) {
+			} else if (i == M2 - 1) {
 				// handle lowst row
-				num_friends += checkSum(V[i][j], V[i][j + 1], V[i][j + 2]);
-				num_friends += checkSum(V[i][j], V[i-1][j + 1], V[i-2][j + 2]);
-			} else if (j == N - 1 && i < M - 2) {
+				num_friends += checkSum(V2[i][j], V2[i][j + 1], V2[i][j + 2]);
+				num_friends += checkSum(V2[i][j], V2[i-1][j + 1], V2[i-2][j + 2]);
+			} else if (j == N - 1 && i < M2 - 2) {
 				// handle rightmost collumn
-				num_friends += checkSum(V[i][j], V[i + 1][j], V[i + 2][j]);
+				num_friends += checkSum(V2[i][j], V2[i + 1][j], V2[i + 2][j]);
 			} else {
-				if (i < M - 2) {
+				if (i < M2 - 2) {
 					// 
-					num_friends += checkSum(V[i][j], V[i + 1][j], V[i + 2][j]);
+					num_friends += checkSum(V2[i][j], V2[i + 1][j], V2[i + 2][j]);
 				}
 				if (j < N - 2) {
-					num_friends += checkSum(V[i][j], V[i][j + 1], V[i][j + 2]);
-					if ( i < M - 2) {
-						num_friends += checkSum(V[i][j], V[i + 1][j + 1], V[i + 2][j + 2]);
+					num_friends += checkSum(V2[i][j], V2[i][j + 1], V2[i][j + 2]);
+					if ( i < M2 - 2) {
+						num_friends += checkSum(V2[i][j], V2[i + 1][j + 1], V2[i + 2][j + 2]);
 					} else if( i > 1) {
-						num_friends += checkSum(V[i][j], V[i-1][j + 1], V[i-2][j + 2]);
+						num_friends += checkSum(V2[i][j], V2[i-1][j + 1], V2[i-2][j + 2]);
 					}
 				}
 			}
