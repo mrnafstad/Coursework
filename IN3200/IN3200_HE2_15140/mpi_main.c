@@ -54,7 +54,7 @@ int main (int argc, char **argv) {
 		} else {
 			printf("Too many arguments, try  <filename> M N\n");
 		}
-	} else {
+	} else if (rank != 0) {
 		MPI_Recv(&M, 1, MPI_INT, 0, 1, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		MPI_Recv(&N, 1, MPI_INT, 0, 2, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 		printf("%d %d\n", M, N);
