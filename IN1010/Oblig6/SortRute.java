@@ -1,5 +1,5 @@
 
-public class SortRute extends Rute {
+public class SortRute extends Rute implements Runnable {
 	private char tegn = '#';
 
 	public SortRute(Labyrint lab, int rad, int kolonne) {
